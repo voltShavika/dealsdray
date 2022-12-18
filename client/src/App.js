@@ -9,7 +9,7 @@ import Employees from './components/Employees'
 import Edit from './components/Edit'
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(false);
+  const [loginStatus, setLoginStatus] = useState(true);
   const [user, setUser] = useState(null);
   const [employees, setEmployees] = useState([]);
 
@@ -27,9 +27,20 @@ function App() {
     navigate("/");
   }
 
+  const addEmployee = (data) => {
+    const oldEmployees = [data, ...employees];
+    setEmployees(oldEmployees);
+  }
+
   const updateEmployee = (i, data) => {
     const oldEmployees = [...employees];
     oldEmployees[i] = {...data}
+    setEmployees(oldEmployees);
+  }
+
+  const removeEmployee = (i) => {
+    const oldEmployees = [...employees];
+    oldEmployees.splice(i,1);
     setEmployees(oldEmployees);
   }
 
@@ -41,6 +52,8 @@ function App() {
       employees: employees,
       setEmployees: setEmployees,
       updateEmployee, updateEmployee,
+      addEmployee, addEmployee,
+      removeEmployee: removeEmployee,
       login: login,
       logout: logout,
     }}>

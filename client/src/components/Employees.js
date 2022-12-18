@@ -4,10 +4,10 @@ import {Link} from 'react-router-dom'
 import DealsdrayContext from '../context/MyContext';
 
 import Container from './Container';
-import {API_EMPLOYEES} from '../api';
+import {API_DELETE, API_EMPLOYEES} from '../api';
 
 export default function Employees() {
-  const {login, employees, setEmployees} = useContext(DealsdrayContext);
+  const {login, employees, setEmployees, removeEmployee} = useContext(DealsdrayContext);
   useEffect(()=> {
     console.log(API_EMPLOYEES);
     axios.get(API_EMPLOYEES).then(res => {
@@ -16,6 +16,14 @@ export default function Employees() {
       console.log(e);
     })
   }, [])
+
+  const handleDelete = (i) => {
+    axios.get(API_DELETE + employees[i]._id).then(res => {
+      removeEmployee(i);
+    }).catch(e => {
+      console.log(e.response);
+    })
+  }
   return (
     <Container>
       <div className='container-fluid'>
@@ -54,7 +62,7 @@ export default function Employees() {
                       <td>
                         <div className='text-center'>
                           <Link to={`/edit/${i}`} className='btn btn-primary'>Edit</Link>
-                          <Link to="/edit" className='btn btn-danger'>Delete</Link>
+                          <button className='btn btn-danger' onClick={()=> handleDelete(i)}>Delete</button>
                         </div>
                       </td>
                     </tr>

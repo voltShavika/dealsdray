@@ -76,9 +76,12 @@ const EmpAddSchema = {
     }
 }
 
-router.post("/add",  async(req, res , next)=>{
+router.post("/add",  (req, res , next)=>{
+    console.log('---------');
+    console.log(req.body);
     try{
         uploadSingleFile(req, res, async (ferr) => {
+            console.log(req.body);
             let errors = []
             if(ferr){
                 errors.push({msg: ferr})
@@ -88,6 +91,7 @@ router.post("/add",  async(req, res , next)=>{
                     errors.push({msg: "Photo cannot be blank"})
                 }
             }
+            console.log(req.body);
             await Promise.all(checkSchema(EmpAddSchema).map(chain => chain.run(req)));
             errors = errors.concat(validationResult(req).array());
             if(errors.length > 0){
@@ -167,4 +171,16 @@ router.post("/edit/:id",  async (req,res, next)=>{
     }
 
 })
+
+router.get("/delete/:id", async(req, res, next) => {
+    try{
+        await Employee.deleteOne({_id: req.params.id})
+        res.status(200).json({msg: "deleted"})
+    }
+    catch(e) {
+        console.log(e.stack);
+        next({msg: e.stack});
+    }
+})
+
 module.exports = router;

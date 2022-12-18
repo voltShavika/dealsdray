@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import Container from './Container'
 import {useParams, useNavigate, Navigate} from 'react-router-dom'
@@ -8,6 +8,11 @@ import { API_EDIT } from '../api';
 export default function Edit() {
   const {index} = useParams();
   const {employees, updateEmployee} = useContext(DealsdrayContext);
+  
+
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
+
   const navigate = useNavigate();
 
   const nameRef = useRef();
@@ -42,11 +47,12 @@ export default function Edit() {
     formData.append('course', course)
 
     axios.post(API_EDIT + employees[index]._id, formData, {}).then(res => {
-      if(res.status == 200){
-        updateEmployee(index, res.data);
-      }
+      setLoading(false);
+      setErrors([]);
+      updateEmployee(index, res.data);
     }).catch(e => {
-      console.log(e);
+      setLoading(false);
+      setErrors([...e.response.data.errors]);
     })
     
   }
@@ -64,6 +70,16 @@ export default function Edit() {
                   <div className='text-center'>
                     <img src={employees[index].image} height="200" width="200" />
                   </div>
+                  {
+                    errors.length > 0 && 
+                    <div className='alert alert-danger'>
+                      <ul>
+                        {
+                          errors.map((e, i) => <li key={i}>{e}</li>)
+                        }
+                      </ul>
+                    </div>
+                  }
                   <div className="row mb-2">
                     <div className="col">
                       <label>Profile Image</label>
@@ -124,10 +140,20 @@ export default function Edit() {
                       </div>
                     </div>
                   </div>
-                  
-                  <div className='text-center'>
-                    <button className='btn btn-info' onClick={handleUpdate}>Update</button>
-                  </div>
+                  {
+                    loading ? 
+                    <div className='text-center'>
+                      <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                      </div>
+                      <br/><br/>
+                    </div>
+                    :
+                    <div className='text-center'>
+                      <button className='btn btn-info' onClick={handleUpdate}>Update</button>
+                    </div>
+                    
+                  }
                 </div>
               </div>
             </div>
