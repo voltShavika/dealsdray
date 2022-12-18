@@ -7,8 +7,7 @@ import Container from './Container';
 import {API_EMPLOYEES} from '../api';
 
 export default function Employees() {
-  const {login} = useContext(DealsdrayContext);
-  const [employees, setEmployees] = useState([]);
+  const {login, employees, setEmployees} = useContext(DealsdrayContext);
   useEffect(()=> {
     console.log(API_EMPLOYEES);
     axios.get(API_EMPLOYEES).then(res => {
@@ -54,7 +53,7 @@ export default function Employees() {
                       <td>{(new Date(emp.createdAt)).toLocaleString()}</td>
                       <td>
                         <div className='text-center'>
-                          <Link to="/edit" className='btn btn-primary'>Edit</Link>
+                          <Link to={`/edit/${i}`} className='btn btn-primary'>Edit</Link>
                           <Link to="/edit" className='btn btn-danger'>Delete</Link>
                         </div>
                       </td>

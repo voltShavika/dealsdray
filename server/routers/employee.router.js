@@ -62,6 +62,12 @@ const EmpAddSchema = {
             errorMessage: "Designation should HR, Manager Or Sales"
         }   
     },
+    course: {
+        isIn: {
+            options: [["BCA", "MCA", "BSC"]],
+            errorMessage: "Course should be BSC, BCA, MCA"
+        }
+    },
     gender: {
         isIn: {
             options: [["M", "F"]],
@@ -94,7 +100,7 @@ router.post("/add",  async(req, res , next)=>{
                 email: req.body.email,
                 number: req.body.number,
                 designation: req.body.designation,
-                course: req.body.course.split(","),
+                course: req.body.course,
                 gender: req.body.gender,
                 image: url + '/public/' + req.file.filename
             })

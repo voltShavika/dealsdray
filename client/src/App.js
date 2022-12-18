@@ -11,16 +11,26 @@ import Edit from './components/Edit'
 function App() {
   const [loginStatus, setLoginStatus] = useState(false);
   const [user, setUser] = useState(null);
+  const [employees, setEmployees] = useState([]);
+
   const login = (loggedInUser, navigate) => {
     setUser({...loggedInUser});
     setLoginStatus(true);
+    setEmployees([]);
     navigate("/dashboard");
   }
 
   const logout = (navigate) => {
     setUser(null);
     setLoginStatus(false);
+    setEmployees([]);
     navigate("/");
+  }
+
+  const updateEmployee = (i, data) => {
+    const oldEmployees = [...employees];
+    oldEmployees[i] = {...data}
+    setEmployees(oldEmployees);
   }
 
   return (
@@ -28,6 +38,9 @@ function App() {
       loginStatus: loginStatus,
       user: user,
       setUser: setUser,
+      employees: employees,
+      setEmployees: setEmployees,
+      updateEmployee, updateEmployee,
       login: login,
       logout: logout,
     }}>
@@ -37,7 +50,7 @@ function App() {
           <Route exact path="/dashboard" element={<Dashboard/>}></Route>
           <Route exact path="/create" element={<Create/>}></Route>
           <Route exact path="/employees" element={<Employees/>}></Route>
-          <Route exact path="/edit" element={<Edit/>}></Route>
+          <Route exact path="/edit/:index" element={<Edit/>}></Route>
         </Routes>
       </Router>
     </DealsdrayContext.Provider>
