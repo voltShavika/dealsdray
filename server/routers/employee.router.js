@@ -52,7 +52,7 @@ const EmpAddSchema = {
         isEmail: true,
         errorMessage: "Email should be valid"
     },
-    phone: {
+    number: {
         isMobilePhone: true,
         errorMessage: "Number should be valid"
     },
