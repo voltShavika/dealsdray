@@ -9,7 +9,7 @@ import Employees from './components/Employees'
 import Edit from './components/Edit'
 
 function App() {
-  const [loginStatus, setLoginStatus] = useState(true);
+  const [loginStatus, setLoginStatus] = useState(false);
   const [user, setUser] = useState(null);
   const [employees, setEmployees] = useState([]);
 
@@ -17,7 +17,7 @@ function App() {
     setUser({...loggedInUser});
     setLoginStatus(true);
     setEmployees([]);
-    navigate("/dashboard");
+    navigate("/employees");
   }
 
   const logout = (navigate) => {
