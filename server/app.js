@@ -16,12 +16,13 @@ app.use(bodyParser.urlencoded({
 app.use("/admin",AdminRouter);
 app.use("/employee",EmployeeRouter);
 
-
+app.use('/public', express.static('public'));
 
 app.use((err, req, res, next) => {
     const code = err.code || 500;
     res.status(code).json({
-        msg: err.msg
+        msg: err.msg,
+        errors: err.errors
     })
     return;
 });

@@ -18,14 +18,13 @@ const employeeSchema = new mongoose.Schema({
     },
     designation: {
         type: String,
+        enum: ["HR", "Manager", "Sales"],
         require: true
     },
-    course: {
-        type: String,
-        require: true
-    },
+    course: [String],
     gender: {
         type: String,
+        enum: ["M", "F"],
         require: true
     },
     image:{

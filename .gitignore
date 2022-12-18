@@ -1,3 +1,6 @@
+*.DS_Store
+*lock.json
+/server/public
 # Logs
 logs
 *.log
