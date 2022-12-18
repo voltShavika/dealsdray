@@ -15,7 +15,7 @@ router.post("/add", async(req,res ,next)=>{
             gender:req.body.gender,
             image:req.body.image
         })
-        await employee.save((err)=>{
+         employee.save((err)=>{
             if(err){
                 next({code:400,msg:"employee already exists"})
             }else{
@@ -46,4 +46,33 @@ router.get("/display", async(req,res,next)=>{
    }
 });
 
+router.post("/edit/:id",async (req,res,next)=>{
+    try{
+        const employee = await Employee.findOne({_id:req.params.id})
+        employee.name = req.body.name
+        employee.number = req.body.number
+        employee.email = req.body.email
+        employee.designation = req.body.designation
+        employee.course = req.body.course
+        employee.gender = req.body.gender
+        employee.image = req.body.image
+        
+        employee.save((err)=>{
+            if(!err){
+                res.status(200).json(employee)
+            }
+            else{
+                next({code:400,msg:"employee cannt be updated"})
+            }
+
+        })
+
+
+    }
+    catch(e){
+        next({msg: e.stack});
+
+    }
+
+})
 module.exports = router;
