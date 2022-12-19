@@ -2,14 +2,19 @@ import React, { useContext } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import DealsdrayContext from '../context/MyContext'
 
+import logo from '../icon.jpg'
+
 export default function Container({children}) {
     const {loginStatus, user, logout} = useContext(DealsdrayContext);
     const navigate = useNavigate();
   return (
+
     <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">Navbar</a>
+                <a className="navbar-brand" href="#">
+                    <img src={logo} height="40"/>
+                </a>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
