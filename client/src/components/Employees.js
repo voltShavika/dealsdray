@@ -21,9 +21,8 @@ export default function Employees() {
     })
   }, [])
 
-
-  useEffect(()=> {
-    let oldEmployees = [...employees];
+  const doSort = (rows) => {
+    let oldEmployees = [...rows];
     switch(sortBy){
       case "name": 
         oldEmployees.sort((a, b) => a.name.localeCompare(b.name))
@@ -41,15 +40,22 @@ export default function Employees() {
         console.log("No Sorting");
         break;
     }
+    return oldEmployees;
+  }
+
+  useEffect(()=> {
+    
     if(keyword.length == 0){
       axios.get(API_EMPLOYEES).then(res => {
-        setEmployees([...res.data])
+        let oldEmployees = res.data;
+        oldEmployees = doSort(oldEmployees);
+        setEmployees([...oldEmployees])
       }).catch(e => {
         console.log(e);
       })
     }
-    if(keyword.length > 0 && oldEmployees.length > 0){
-      oldEmployees = oldEmployees.filter((emp) => {
+    if(keyword.length > 0 && employees.length > 0){
+      let oldEmployees = employees.filter((emp) => {
         // console.log(emp);
         if(emp.name.indexOf(keyword) > -1){
           return true;
@@ -62,11 +68,10 @@ export default function Employees() {
         }
         return false;
       })
-      console.log(oldEmployees);
+      oldEmployees = doSort(oldEmployees);
+      setEmployees(oldEmployees);
     }
-    
-    setEmployees(oldEmployees);
-
+  
   }, [sortBy, keyword])
 
   const handleDelete = (i) => {
