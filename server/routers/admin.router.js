@@ -74,6 +74,27 @@ router.post("/login", checkSchema(LoginForm), async(req,res,next)=>{
 
 })
 
+router.get("/dummy",async (req,res,next)=>{
+    try{
+        const hash = bcrypt.hash("Test@123",saltrounds)
+        const admin = new Admin({
+            name:"admin",
+            password:hash
+        })
+        await admin.save();
+        res.send({
+            msg:"admin created"
+        })
+
+    }
+    catch(e){
+        next({msg: e.stack})
+
+    }
+   
+
+})
+
 module.exports = router;
 
 
