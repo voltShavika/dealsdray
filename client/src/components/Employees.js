@@ -8,6 +8,10 @@ import {API_DELETE, API_EMPLOYEES} from '../api';
 
 export default function Employees() {
   const {loginStatus, employees, setEmployees, removeEmployee} = useContext(DealsdrayContext);
+
+  const [sortBy, setSortBy] = useState("");
+  const [keyword, setKeyword] = useState("");
+
   useEffect(()=> {
     console.log(API_EMPLOYEES);
     axios.get(API_EMPLOYEES).then(res => {
@@ -17,6 +21,29 @@ export default function Employees() {
     })
   }, [])
 
+  useEffect(()=> {
+    let oldEmployees = [...employees];
+    switch(sortBy){
+      case "name": 
+        oldEmployees.sort((a, b) => a.name.localeCompare(b.name))
+        break;
+      case "email": 
+        oldEmployees.sort((a, b) => a.email.localeCompare(b.email))
+        break;
+      case "date": 
+        oldEmployees.sort((a, b) => new Date(a.date) < new Date(b.date))
+        break;
+      case "id": 
+        oldEmployees.sort((a, b) => a._id.localeCompare(b._id))
+        break;
+      default: 
+        console.log("No Sorting");
+        break;
+    }
+    setEmployees(oldEmployees);
+
+  }, [sortBy, keyword])
+
   const handleDelete = (i) => {
     axios.get(API_DELETE + employees[i]._id).then(res => {
       removeEmployee(i);
@@ -24,6 +51,12 @@ export default function Employees() {
       console.log(e.response);
     })
   }
+  
+  const handleClear = () => {
+    setSortBy("");
+    setKeyword("");
+  }
+
   return (
     <>
       {
@@ -34,6 +67,30 @@ export default function Employees() {
             <div className='row pt-5'>
               <h2>Employees</h2>
               <hr/>
+              <div className='row'>
+                <div className='col'>
+                
+                </div>
+                <div className='col'>
+                  <div className='row'>
+                  <div className='col'>
+                      <button className='btn btn-primary form-control' onClick={handleClear}>Clear</button>
+                    </div>
+                    <div className='col'>
+                      <select className='form-select' value={sortBy} onChange={(e)=> setSortBy(e.target.value)}>
+                        <option value=""></option>
+                        <option value="name">Name</option>
+                        <option value="email">Email</option>
+                        <option value="date">Date</option>
+                        <option value="id">Id</option>
+                      </select>
+                    </div>
+                    <div className='col'>
+                      <input type="text" placeholder='Search by keyword' className='form-control' value={keyword} onChange={(e)=> setKeyword(e.target.value)}/>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <table className="table table-striped">
                 <thead>
                   <tr>
