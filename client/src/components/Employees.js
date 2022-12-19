@@ -21,6 +21,7 @@ export default function Employees() {
     })
   }, [])
 
+
   useEffect(()=> {
     let oldEmployees = [...employees];
     switch(sortBy){
@@ -40,6 +41,30 @@ export default function Employees() {
         console.log("No Sorting");
         break;
     }
+    if(keyword.length == 0){
+      axios.get(API_EMPLOYEES).then(res => {
+        setEmployees([...res.data])
+      }).catch(e => {
+        console.log(e);
+      })
+    }
+    if(keyword.length > 0 && oldEmployees.length > 0){
+      oldEmployees = oldEmployees.filter((emp) => {
+        // console.log(emp);
+        if(emp.name.indexOf(keyword) > -1){
+          return true;
+        }
+        if(emp.email.indexOf(keyword) > -1){
+          return true;
+        }
+        if(emp._id.indexOf(keyword) > -1){
+          return true;
+        }
+        return false;
+      })
+      console.log(oldEmployees);
+    }
+    
     setEmployees(oldEmployees);
 
   }, [sortBy, keyword])
